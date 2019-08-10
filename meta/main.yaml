@@ -1,2 +1,14 @@
 ---
-dependencies: []
+dependencies:
+- role: shell-skeleton
+- role: php
+# dependency management
+- role: composer
+# debugging
+- role: php-xdebug
+# required by mess detector
+- role: php-xml
+# required by PHPUnit
+- role: php-mbstring
+# required by Phan
+- role: php-ast
