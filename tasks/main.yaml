@@ -28,4 +28,4 @@
 - shell: '{{ php_skeleton.php_executable }} composer.phar install --no-progress'
   args:
     chdir: '{{ ansible_user_dir }}/src/php-skeleton'
-  when: check_directory.stat.exists == False or check_repository.changed
+  when: not check_directory.stat.exists or check_repository.changed
