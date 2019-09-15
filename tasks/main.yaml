@@ -20,14 +20,8 @@
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/ethernet-device.txt'
 
 - template:
-    src: domain-linux.txt
+    src: domain.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
-  when: ansible_system == 'Linux'
-
-- template:
-    src: domain-macos.txt
-    dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
-  when: ansible_system == 'Darwin'
 
 # TODO: Composer module for Ansible does not appear to work in 2.5.
 #- composer:
