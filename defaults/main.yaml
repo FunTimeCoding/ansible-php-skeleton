@@ -1,5 +1,3 @@
 ---
-git:
-  protocol: ssh
 php_skeleton:
   php_executable: php
