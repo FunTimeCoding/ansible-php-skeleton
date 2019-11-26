@@ -23,21 +23,23 @@
     src: domain.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
 
-# TODO: Composer module for Ansible does not appear to work in 2.5.
-#- composer:
-#    command: install
-#    working_dir: '{{ ansible_user_dir }}/src/php-skeleton'
-#    executable: '{{ php_skeleton.php_executable }}'
+- composer:
+    command: install
+    working_dir: '{{ ansible_user_dir }}/src/php-skeleton'
+    executable: '{{ php_skeleton.php_executable }}'
+  when: ansible_distribution_release != 'stretch'
 
 - get_url:
     url: 'https://getcomposer.org/download/{{ composer.version }}/composer.phar'
     dest: '{{ ansible_user_dir }}/src/php-skeleton/composer.phar'
+  when: ansible_distribution_release == 'stretch'
 
 - stat:
     path: '{{ ansible_user_dir }}/src/php-skeleton/vendor'
   register: check_directory
+  when: ansible_distribution_release == 'stretch'
 
 - shell: '{{ php_skeleton.php_executable }} composer.phar install --no-progress'
   args:
     chdir: '{{ ansible_user_dir }}/src/php-skeleton'
-  when: not check_directory.stat.exists or check_repository.changed
+  when: ansible_distribution_release == 'stretch' and (not check_directory.stat.exists or check_repository.changed)
