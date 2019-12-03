@@ -1,3 +1,4 @@
 ---
 php_skeleton:
+  branch: master
   php_executable: php
