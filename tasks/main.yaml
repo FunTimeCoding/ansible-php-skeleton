@@ -2,14 +2,14 @@
 - git:
     repo: git@github.com:FunTimeCoding/php-skeleton.git
     dest: '{{ ansible_user_dir }}/src/php-skeleton'
-    version: '{{ php_skeleton.branch }}'
+    version: '{{ php_skeleton.version }}'
   register: check_repository
   when: git.protocol == 'ssh'
 
 - git:
     repo: https://github.com/FunTimeCoding/php-skeleton.git
     dest: '{{ ansible_user_dir }}/src/php-skeleton'
-    version: '{{ php_skeleton.branch }}'
+    version: '{{ php_skeleton.version }}'
   register: check_repository
   when: git.protocol == 'https'
 
