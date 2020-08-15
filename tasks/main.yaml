@@ -20,10 +20,12 @@
 - template:
     src: ethernet-device.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/ethernet-device.txt'
+    mode: 0644
 
 - template:
     src: domain.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
+    mode: 0644
 
 - composer:
     command: install
