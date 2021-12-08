@@ -3,14 +3,14 @@
     repo: git@github.com:FunTimeCoding/php-skeleton.git
     dest: '{{ ansible_user_dir }}/src/php-skeleton'
     version: '{{ php_skeleton.version }}'
-  register: check_repository
+  #register: check_repository
   when: git.protocol == 'ssh'
 
 - git:
     repo: https://github.com/FunTimeCoding/php-skeleton.git
     dest: '{{ ansible_user_dir }}/src/php-skeleton'
     version: '{{ php_skeleton.version }}'
-  register: check_repository
+  #register: check_repository
   when: git.protocol == 'https'
 
 - file:
@@ -21,30 +21,47 @@
     src: ethernet-device.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/ethernet-device.txt'
     mode: 0644
+  when: ansible_system != 'Windows'
+  check_mode: ansible_system != 'Windows'
+
+- template:
+    src: ethernet-device.txt
+    dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/ethernet-device.txt'
+    mode: 0755
+  when: ansible_system == 'Windows'
 
 - template:
     src: domain.txt
     dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
     mode: 0644
+  when: ansible_system != 'Windows'
+  check_mode: ansible_system != 'Windows'
 
-- composer:
-    command: install
-    working_dir: '{{ ansible_user_dir }}/src/php-skeleton'
-    executable: '{{ php_skeleton.php_executable }}'
-  when: ansible_distribution_release != 'stretch'
+- template:
+    src: domain.txt
+    dest: '{{ ansible_user_dir }}/src/php-skeleton/tmp/domain.txt'
+    mode: 0755
+  when: ansible_system == 'Windows'
 
-- get_url:
-    url: 'https://getcomposer.org/download/{{ composer.version }}/composer.phar'
-    dest: '{{ ansible_user_dir }}/src/php-skeleton/composer.phar'
-    mode: 0644
-  when: ansible_distribution_release == 'stretch'
-
-- stat:
-    path: '{{ ansible_user_dir }}/src/php-skeleton/vendor'
-  register: check_directory
-  when: ansible_distribution_release == 'stretch'
-
-- shell: '{{ php_skeleton.php_executable }} composer.phar install --no-progress'
-  args:
-    chdir: '{{ ansible_user_dir }}/src/php-skeleton'
-  when: ansible_distribution_release == 'stretch' and (not check_directory.stat.exists or check_repository.changed)
+# TODO: Use Docker to composer install.
+#- composer:
+#    command: install
+#    working_dir: '{{ ansible_user_dir }}/src/php-skeleton'
+#    executable: '{{ php_skeleton.php_executable }}'
+#  when: ansible_distribution_release != 'stretch'
+#
+#- get_url:
+#    url: 'https://getcomposer.org/download/{{ composer.version }}/composer.phar'
+#    dest: '{{ ansible_user_dir }}/src/php-skeleton/composer.phar'
+#    mode: 0644
+#  when: ansible_distribution_release == 'stretch'
+#
+#- stat:
+#    path: '{{ ansible_user_dir }}/src/php-skeleton/vendor'
+#  register: check_directory
+#  when: ansible_distribution_release == 'stretch'
+#
+#- shell: '{{ php_skeleton.php_executable }} composer.phar install --no-progress'
+#  args:
+#    chdir: '{{ ansible_user_dir }}/src/php-skeleton'
+#  when: ansible_distribution_release == 'stretch' and (not check_directory.stat.exists or check_repository.changed)
